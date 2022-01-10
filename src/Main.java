@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String argv[]) {
+    public static void main(String args[]) {
         int choose;
         Main m = new Main();
         Scanner sc = new Scanner(System.in);
