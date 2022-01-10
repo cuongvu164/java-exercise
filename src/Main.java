@@ -32,7 +32,7 @@ public class Main {
                     break;
                 default:
                     sc.close();
-                    break;
+                    return;
             }
         }
 
