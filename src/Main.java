@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Main {
-    public static void main(String argv[]) {
+    public static void main(String argv[]) throws Exception {
         int choose;
         Main m = new Main();
         Scanner sc = new Scanner(System.in);
@@ -10,114 +10,86 @@ public class Main {
 //            choose = ;
             switch (sc.nextInt()) {
                 case 1:
-                    m.SumAverageRunningInt(1, 100);
+//                    m.SumAverageRunningInt(1, 100);
                     break;
                 case 2:
-                    m.ArrayContains();
-                    break;
-                case 3:
-                    m.FrequentNumber();
-                    break;
-                case 4:
-                    m.ArrayReverse();
+                    m.BMI();
                     break;
                 default:
                     sc.close();
                     return;
             }
         }
-
-
     }
 
-    private void ArrayReverse() {
+//    public double calculate(double a, VectorOperators.Operator operator, double b){
+//        return 0;
+//    }
+
+    public void BMI() {
         Scanner sc = new Scanner(System.in);
-        List<Integer> arrayList = new ArrayList<>();
-        List<Integer> reversedList = new ArrayList<>();
-
-        System.out.println("Enter length of array ");
-        int len = sc.nextInt();
-
-        System.out.print("Enter item of array:");
-        for (int i = 0; i < len; i++) {
-            arrayList.add(sc.nextInt());
-        }
-        System.out.println("Original Array: " + arrayList);
-        Collections.reverse(arrayList);
-        System.out.println("Reversed Array: " + arrayList);
+        double weight = 0, height = 0;
+        inputHeightAndWeight(sc, false, false, weight, height);
     }
 
-    private void FrequentNumber() {
-        int i = 0, count = 0;
-        List<Integer> newArray = new ArrayList<>();
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter length of array ");
-        int len = sc.nextInt();
-
-        Integer[] array = new Integer[len];
-        System.out.print("Enter item of array:");
-        do {
-            array[i] = sc.nextInt();
-            i++;
-        } while (i < len);
-
-        System.out.print("Enter value:");
-        int value = sc.nextInt();
-        for (int j = 0; j < array.length; j++) {
-            if (array[j] == value) {
-                count++;
-                newArray.add(j);
+    public void inputHeightAndWeight(Scanner sc, boolean doneWeight, boolean doneHeight, double height, double weight) {
+        while (!doneWeight) {
+            try {
+                System.out.print("Enter Weight:");
+                weight = Double.parseDouble(sc.nextLine());
+                doneWeight = true;
+            } catch (NumberFormatException e) {
+                System.out.println("BMI is digit");
             }
         }
 
-        System.out.println("Amount of frequence: " + count);
-        System.out.println("Indexs: " + newArray);
+        while (!doneHeight) {
+            try {
+                System.out.print("Enter Height:");
+                height = Double.parseDouble(sc.nextLine());
+                if (height <= 0) throw new ArithmeticException();
+                doneHeight = true;
+            } catch (NumberFormatException e) {
+                System.out.println("BMI is digit");
+            } catch (ArithmeticException e) {
+                System.out.println("Height must be great than 0");
+            }
+        }
+
+        System.out.println("BMI Number: " + calculateBMI(weight, height));
+        System.out.print("BMI Status: ");
+        System.out.println(statusBMI.getValue(calculateBMI(weight, height)));
+
     }
 
-    private void ArrayContains() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter length of array ");
-        int n = sc.nextInt();
+    public double calculateBMI(double weight, double height) {
+        return (weight / Math.pow(height, 2)) * 10000;
+    }
 
-        String[] stringArray = new String[n];
-        System.out.print("Enter item of array:");
-        for (int i = 0; i < n; i++) {
-            stringArray[i] = sc.next();
-        }
-//        Arrays.stream(stringArray).forEach(item -> System.out.println(item));
-        System.out.println("Enter a string variable ");
-        String sValue = sc.next();
+    public enum statusBMI {
+        SUBSTANDARD, STANDARD, OVERWEIGHT, FAT, OBESE;
+        statusBMI() {}
 
-        for (int i = 0; i < stringArray.length; i++) {
-            if (stringArray[i].equals(sValue)) {
-                System.out.println("Check " + sValue + "in Array: Contained!");
-                return;
+        public static statusBMI getValue(double indexBMI) {
+            if (indexBMI < 19) {
+                return SUBSTANDARD;
+            } else if (indexBMI >= 19 && indexBMI < 25) {
+                return STANDARD;
+            } else if (indexBMI >= 25 && indexBMI < 30) {
+                return OVERWEIGHT;
+            } else if (indexBMI >= 30 && indexBMI < 40) {
+                return FAT;
             } else {
-                System.out.println("Check '" + sValue + "' in Array: No Contain!");
-                return;
+                return OBESE;
             }
         }
     }
-
-    private void SumAverageRunningInt(int firstNumber, int lastNumber) {
-        int sum;
-        List<Integer> array = new ArrayList<>();
-        for (int i = firstNumber; i <= lastNumber; i++) {
-            array.add(i);
-        }
-        sum = array
-                .stream()
-                .reduce(0, (sub, ele) -> sub + ele);
-        System.out.println("Average: " + (sum / array.size()));
-    }
-
 
     public static void menu() {
         System.out.println("=====================================================");
-        System.out.println("1.Exercise 1");
-        System.out.println("2.Exercise 2");
-        System.out.println("3.Exercise 3");
-        System.out.println("4.Exercise 4");
+        System.out.println("1.Normal Calculator");
+        System.out.println("2.BMI Calculator");
+        System.out.println("3.Exit");
         System.out.println("Choose an option:");
     }
 }
